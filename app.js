@@ -11,6 +11,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/users", userRouter);
+app.use((err, req, res, next) => {
+  console.error(err);
+  err &&
+    res
+      .status(400)
+      .json({ errors: [{ msg: `${err.message}`, path: "adminCode" }] });
+});
 
 app.get("/", (req, res) =>
   res.send(`
