@@ -12,7 +12,11 @@ const createUser = async (req, res, next) => {
     if (adminCode === process.env.ADMIN_CODE) {
       status = "ADMIN";
     } else {
-      return next(new Error("Incorrect admin code provided"));
+      return next(
+        Error("Incorrect admin code provided", {
+          cause: { message: "Incorrect code", field: "adminCode" },
+        })
+      );
     }
   }
   bcrypt.hash(password, 10, async (err, hashedPassword) => {

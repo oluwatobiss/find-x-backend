@@ -1,6 +1,7 @@
 require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
+const authenticationRouter = require("./routes/authentication");
 const userRouter = require("./routes/user");
 
 const app = express();
@@ -11,12 +12,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/users", userRouter);
+app.use("/auths", authenticationRouter);
 app.use((err, req, res, next) => {
   console.error(err);
   err &&
-    res
-      .status(400)
-      .json({ errors: [{ msg: `${err.message}`, path: "adminCode" }] });
+    res.status(400).json({
+      errors: [{ msg: `${err.cause.message}`, field: `${err.cause.field}` }],
+    });
 });
 
 app.get("/", (req, res) =>
