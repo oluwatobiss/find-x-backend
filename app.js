@@ -17,7 +17,7 @@ app.use((err, req, res, next) => {
   console.error(err);
   err &&
     res.status(400).json({
-      errors: [{ msg: `${err.cause.message}`, field: `${err.cause.field}` }],
+      errors: [{ msg: `${err.cause.msg}`, path: `${err.cause.path}` }],
     });
 });
 

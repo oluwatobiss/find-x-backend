@@ -15,15 +15,12 @@ passport.use(
       const userData = await prisma.user.findUnique({ where: { email } });
       await prisma.$disconnect();
       if (!userData)
-        return done(null, false, {
-          message: "Incorrect email",
-          field: "email",
-        });
+        return done(null, false, { msg: "Incorrect email", path: "email" });
       const match = await bcrypt.compare(password, userData.password);
       if (!match)
         return done(null, false, {
-          message: "Incorrect password",
-          field: "password",
+          msg: "Incorrect password",
+          path: "password",
         });
       return done(null, userData);
     } catch (e) {
