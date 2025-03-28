@@ -14,16 +14,23 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   firstName String
   lastName  String
-  username  String    @unique
-  email     String    @unique
+  username  String @unique
+  email     String @unique
   password  String
-  status    Status    @default(GAMER)
+  status    Status @default(GAMER)
 }
 
-enum Status {  
+model Image {
+  id        Int    @id @default(autoincrement())
+  imageName String @unique
+  imageUrl  String @unique
+  itemsData Json
+}
+
+enum Status {
   GAMER
   ADMIN
 }

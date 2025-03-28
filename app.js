@@ -3,6 +3,7 @@ const cors = require("cors");
 const express = require("express");
 const authenticationRouter = require("./routes/authentication");
 const userRouter = require("./routes/user");
+const imageRouter = require("./routes/image");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/users", userRouter);
+app.use("/images", imageRouter);
 app.use("/auths", authenticationRouter);
 app.use((err, req, res, next) => {
   console.error(err);

@@ -5,24 +5,15 @@ const emptyErr = "must not be blank";
 const lengthErr = (min, max) => `must be between ${min} and ${max} characters`;
 
 const updateUserForm = [
-  body("firstName")
+  body(["firstName", "lastName"])
     .trim()
     .notEmpty()
-    .withMessage(`First name ${emptyErr}.`)
+    .withMessage(`Name ${emptyErr}.`)
     .escape()
     .isAlpha()
-    .withMessage(`First name ${alphaErr}.`)
+    .withMessage(`Name ${alphaErr}.`)
     .isLength({ min: 2, max: 64 })
-    .withMessage(`First name ${lengthErr(2, 64)}.`),
-  body("lastName")
-    .trim()
-    .notEmpty()
-    .withMessage(`Last name ${emptyErr}.`)
-    .escape()
-    .isAlpha()
-    .withMessage(`Last name ${alphaErr}.`)
-    .isLength({ min: 2, max: 64 })
-    .withMessage(`Last name ${lengthErr(2, 64)}.`),
+    .withMessage(`Name ${lengthErr(2, 64)}.`),
   body("username")
     .trim()
     .notEmpty()
@@ -61,8 +52,36 @@ const loginForm = [
     .escape(),
 ];
 
+const imageForm = [
+  body(["imageName", "itemsData.*.itemName"])
+    .trim()
+    .notEmpty()
+    .withMessage(`Name ${emptyErr}.`)
+    .escape()
+    .isAlpha()
+    .withMessage(`Name ${alphaErr}.`)
+    .isLength({ min: 2, max: 64 })
+    .withMessage(`Name ${lengthErr(2, 64)}.`),
+  body(["imageUrl", "itemsData.*.itemImageUrl"])
+    .trim()
+    .isURL()
+    .withMessage("Enter a valid URL."),
+  body([
+    "itemsData.*.centerX",
+    "itemsData.*.centerY",
+    "itemsData.*.startX",
+    "itemsData.*.startY",
+    "itemsData.*.endX",
+    "itemsData.*.endY",
+  ])
+    .trim()
+    .isNumeric()
+    .withMessage("Only numbers allowed."),
+];
+
 module.exports = {
   signUpForm,
   updateUserForm,
   loginForm,
+  imageForm,
 };
