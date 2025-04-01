@@ -102,4 +102,17 @@ const updateUser = [
   },
 ];
 
-module.exports = { getUsers, createUser, updateUser };
+async function deleteUser(req, res) {
+  try {
+    const id = +req.params.id;
+    const user = await prisma.user.delete({ where: { id } });
+    await prisma.$disconnect();
+    return res.json(user);
+  } catch (e) {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
+}
+
+module.exports = { getUsers, createUser, updateUser, deleteUser };
