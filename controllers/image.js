@@ -63,4 +63,17 @@ const updateImage = [
   },
 ];
 
-module.exports = { getImages, createImage, updateImage };
+async function deleteImage(req, res) {
+  try {
+    const id = +req.params.id;
+    const image = await prisma.image.delete({ where: { id } });
+    await prisma.$disconnect();
+    return res.json(image);
+  } catch (e) {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
+}
+
+module.exports = { getImages, createImage, updateImage, deleteImage };
