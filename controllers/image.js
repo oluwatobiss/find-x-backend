@@ -25,9 +25,9 @@ const createImage = [
       return res.status(400).json({ errors: result.array() });
     }
     try {
-      const { imageName, imageUrl, itemsData } = req.body;
+      const { imageName, imageUrl, itemsData, published } = req.body;
       const response = await prisma.image.create({
-        data: { imageName, imageUrl, itemsData },
+        data: { imageName, imageUrl, itemsData, published },
       });
       await prisma.$disconnect();
       return res.json(response);
@@ -48,10 +48,10 @@ const updateImage = [
     }
     try {
       const id = +req.params.id;
-      const { imageName, imageUrl, itemsData } = req.body;
+      const { imageName, imageUrl, itemsData, published } = req.body;
       const image = await prisma.image.update({
         where: { id },
-        data: { imageName, imageUrl, itemsData },
+        data: { imageName, imageUrl, itemsData, published },
       });
       await prisma.$disconnect();
       return res.json(image);
