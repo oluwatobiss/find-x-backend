@@ -4,6 +4,18 @@ const bcrypt = require("bcryptjs");
 const validate = require("../middlewares/validator");
 const prisma = new PrismaClient();
 
+async function getUsers(req, res) {
+  try {
+    const users = await prisma.user.findMany();
+    await prisma.$disconnect();
+    return res.json(users);
+  } catch (e) {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
+}
+
 const createUser = [
   validate.signUpForm,
   async (req, res, next) => {
@@ -53,4 +65,41 @@ const createUser = [
   },
 ];
 
-module.exports = { createUser };
+const updateUser = [
+  validate.updateUserForm,
+  async (req, res, next) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(400).json({ errors: result.array() });
+    }
+    try {
+      const id = +req.params.id;
+      const { firstName, lastName, username, email, admin, adminCode } =
+        req.body;
+      let status = "GAMER";
+      if (admin) {
+        if (adminCode === process.env.ADMIN_CODE) {
+          status = "ADMIN";
+        } else {
+          return next(
+            Error("Incorrect admin code provided", {
+              cause: { msg: "Incorrect code", path: "adminCode" },
+            })
+          );
+        }
+      }
+      const user = await prisma.user.update({
+        where: { id },
+        data: { firstName, lastName, username, email, status },
+      });
+      await prisma.$disconnect();
+      return res.json(user);
+    } catch (e) {
+      console.error(e);
+      await prisma.$disconnect();
+      process.exit(1);
+    }
+  },
+];
+
+module.exports = { getUsers, createUser, updateUser };
