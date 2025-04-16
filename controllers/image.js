@@ -15,6 +15,19 @@ async function getImages(req, res) {
   }
 }
 
+async function getImageItems(req, res) {
+  try {
+    const id = +req.params.id;
+    const image = await prisma.image.findUnique({ where: { id } });
+    await prisma.$disconnect();
+    return res.json(image.itemsData);
+  } catch (e) {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
+}
+
 const createImage = [
   validate.imageForm,
   async (req, res) => {
@@ -76,4 +89,10 @@ async function deleteImage(req, res) {
   }
 }
 
-module.exports = { getImages, createImage, updateImage, deleteImage };
+module.exports = {
+  getImages,
+  getImageItems,
+  createImage,
+  updateImage,
+  deleteImage,
+};
