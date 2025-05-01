@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 # Word backup files
 ~$*.docx
+*.tmp

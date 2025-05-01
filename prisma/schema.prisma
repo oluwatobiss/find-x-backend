@@ -29,6 +29,7 @@ model Leader {
   player   User   @relation(fields: [playerId], references: [username], onDelete: Cascade)
   playerId String
   time     String
+  timeSort Int
 }
 
 model Image {
