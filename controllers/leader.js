@@ -1,6 +1,18 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+async function getLeaders(req, res) {
+  try {
+    const top10leaders = await prisma.leader.findMany();
+    await prisma.$disconnect();
+    return res.json(top10leaders);
+  } catch (e) {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
+}
+
 async function createLeader(req, res) {
   try {
     const { playerId, hours, minutes, seconds } = req.body;
@@ -53,4 +65,4 @@ async function createLeader(req, res) {
   }
 }
 
-module.exports = { createLeader };
+module.exports = { getLeaders, createLeader };
