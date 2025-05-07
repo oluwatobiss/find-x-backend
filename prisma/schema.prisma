@@ -39,6 +39,7 @@ model Image {
   imageUrl  String  @unique
   itemsData Json
   published Boolean
+  sample    Boolean
 }
 
 enum Status {

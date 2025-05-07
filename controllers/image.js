@@ -5,7 +5,14 @@ const prisma = new PrismaClient();
 
 async function getImages(req, res) {
   try {
-    const images = await prisma.image.findMany();
+    console.log("=== getImages ===");
+    console.log(req.query);
+    console.log(req.query.auth === "true");
+
+    const images =
+      req.query.auth === "true"
+        ? await prisma.image.findMany()
+        : await prisma.image.findMany({ where: { sample: true } });
     await prisma.$disconnect();
     return res.json(images);
   } catch (e) {
@@ -38,9 +45,9 @@ const createImage = [
       return res.status(400).json({ errors: result.array() });
     }
     try {
-      const { imageName, imageUrl, itemsData, published } = req.body;
+      const { imageName, imageUrl, sample, itemsData, published } = req.body;
       const response = await prisma.image.create({
-        data: { imageName, imageUrl, itemsData, published },
+        data: { imageName, imageUrl, sample, itemsData, published },
       });
       await prisma.$disconnect();
       return res.json(response);
@@ -61,10 +68,10 @@ const updateImage = [
     }
     try {
       const id = +req.params.id;
-      const { imageName, imageUrl, itemsData, published } = req.body;
+      const { imageName, imageUrl, sample, itemsData, published } = req.body;
       const image = await prisma.image.update({
         where: { id },
-        data: { imageName, imageUrl, itemsData, published },
+        data: { imageName, imageUrl, sample, itemsData, published },
       });
       await prisma.$disconnect();
       return res.json(image);
