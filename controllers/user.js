@@ -6,6 +6,13 @@ const prisma = new PrismaClient();
 
 async function getUsers(req, res) {
   try {
+    console.log("=== getUsers ===");
+    console.log(req.query);
+
+    if (req.query.status !== "ADMIN") {
+      return res.status(400).json({ message: "Invalid access credentials" });
+    }
+
     const users = await prisma.user.findMany();
     await prisma.$disconnect();
     return res.json(users);
