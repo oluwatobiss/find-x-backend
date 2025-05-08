@@ -3,7 +3,9 @@ const prisma = new PrismaClient();
 
 async function getLeaders(req, res) {
   try {
-    const top10leaders = await prisma.leader.findMany();
+    const top10leaders = await prisma.leader.findMany({
+      orderBy: { timeSort: "asc" },
+    });
     await prisma.$disconnect();
     return res.json(top10leaders);
   } catch (e) {
