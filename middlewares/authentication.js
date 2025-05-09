@@ -15,6 +15,8 @@ function authenticateUser(req, res, next) {
     console.log("Is Valid User");
 
     req.user = decoded;
+
+    console.log(req.user);
     next();
   });
 }
