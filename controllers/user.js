@@ -15,6 +15,8 @@ async function getUsers(req, res) {
 
     const users = await prisma.user.findMany();
     await prisma.$disconnect();
+    console.log(users);
+
     return res.json(users);
   } catch (e) {
     console.error(e);
