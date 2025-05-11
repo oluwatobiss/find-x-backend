@@ -20,7 +20,7 @@ jest.mock("../middlewares/authentication", () => ({
   },
 }));
 
-test("GET /users serve json response", (done) => {
+test("GET /users get all users' data", (done) => {
   request(app)
     .get("/users/?status=ADMIN")
     .expect("Content-Type", /json/)
@@ -90,6 +90,25 @@ test("PUT /users/:id update specified user account", (done) => {
     .end(function (err, res) {
       if (err) return done(err);
       console.log("=== PUT /users/:id Test Passed! ===");
+      console.log(res.text);
+      return done();
+    });
+});
+
+test("DELETE /users/:id delete specified user account", (done) => {
+  request(app)
+    .delete(`/users/${userId}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      console.log("=== Custom Assertion Function ===");
+      console.log(res.body);
+      if (res.body.lastName !== "Update")
+        throw new Error("mismatch lastName value");
+    })
+    .end(function (err, res) {
+      if (err) return done(err);
+      console.log("=== DELETE /users/:id Test Passed! ===");
       console.log(res.text);
       return done();
     });
