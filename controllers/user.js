@@ -6,17 +6,11 @@ const prisma = new PrismaClient();
 
 async function getUsers(req, res) {
   try {
-    console.log("=== getUsers ===");
-    console.log(req.query);
-
     if (req.query.status !== "ADMIN") {
       return res.status(400).json({ message: "Invalid access credentials" });
     }
-
     const users = await prisma.user.findMany();
     await prisma.$disconnect();
-    console.log(users);
-
     return res.json(users);
   } catch (e) {
     console.error(e);
@@ -28,12 +22,8 @@ async function getUsers(req, res) {
 const createUser = [
   validate.signUpForm,
   async (req, res, next) => {
-    console.log("=== createUser controller ===");
-    console.log(req.body);
     const result = validationResult(req);
     if (!result.isEmpty()) {
-      console.log("=== createUser controller error ===");
-      console.log(result.array());
       return res.status(400).json({ errors: result.array() });
     }
     const { firstName, lastName, username, email, password, admin, adminCode } =
@@ -115,10 +105,6 @@ async function deleteUser(req, res) {
   try {
     const id = +req.params.id;
     const user = await prisma.user.delete({ where: { id } });
-
-    console.log(" === Delete User ===");
-    console.log(user);
-
     await prisma.$disconnect();
     return res.json(user);
   } catch (e) {

@@ -25,14 +25,10 @@ test("GET /users get all users' data", (done) => {
     .get("/users/?status=ADMIN")
     .expect("Content-Type", /json/)
     .expect(function (res) {
-      console.log("=== Custom Assertion Function ===");
-      console.log(res.body);
       if (!("lastName" in res.body[0])) throw new Error("missing lastName key");
     })
     .end(function (err, res) {
       if (err) return done(err);
-      console.log("=== GET /users Test Passed! ===");
-      console.log(res.text);
       return done();
     });
 });
@@ -51,20 +47,12 @@ test("POST /users create new user account", (done) => {
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
-      console.log("=== Custom Assertion Function ===");
-      console.log(res.body.id);
       if (!("username" in res.body)) throw new Error("missing username key");
     })
     .then((res) => {
-      console.log("=== then() Promise ===");
       const expectedBody = { id: res.body.id, username: "test" };
-      console.log(res.body);
       expect(res.body).toEqual(expectedBody);
-      console.log("=== POST /users Test Passed! ===");
       userId = res.body.id;
-      console.log(res.text);
-      console.log(res.body.id);
-      console.log(userId);
       done();
     })
     .catch((err) => done(err));
@@ -82,15 +70,11 @@ test("PUT /users/:id update specified user account", (done) => {
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
-      console.log("=== Custom Assertion Function ===");
-      console.log(res.body.id);
       if (res.body.firstName !== "Testing")
         throw new Error("mismatch firstName value");
     })
     .end(function (err, res) {
       if (err) return done(err);
-      console.log("=== PUT /users/:id Test Passed! ===");
-      console.log(res.text);
       return done();
     });
 });
@@ -101,15 +85,11 @@ test("DELETE /users/:id delete specified user account", (done) => {
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
-      console.log("=== Custom Assertion Function ===");
-      console.log(res.body);
       if (res.body.lastName !== "Update")
         throw new Error("mismatch lastName value");
     })
     .end(function (err, res) {
       if (err) return done(err);
-      console.log("=== DELETE /users/:id Test Passed! ===");
-      console.log(res.text);
       return done();
     });
 });
