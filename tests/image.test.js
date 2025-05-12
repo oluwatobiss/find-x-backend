@@ -3,6 +3,7 @@ const express = require("express");
 const imageRouter = require("../routes/image");
 const request = require("supertest");
 const app = express();
+let imageId = 0;
 
 app.use(cors());
 app.use(express.json());
@@ -80,7 +81,77 @@ test("POST /images create new image", (done) => {
     .expect(200)
     .expect((res) => {
       if (!("imageName" in res.body)) throw new Error("missing imageName key");
+      imageId = res.body.id;
       return done();
     })
     .catch((err) => done(err));
+});
+
+test("PUT /images/:id update specified image", (done) => {
+  const updatedImage = {
+    imageName: "Behind the Farmer Back",
+    imageUrl:
+      "https://www.pinterest.com/pin/hidden-pictures-worksheet--514747432422979388/",
+    itemsData: [
+      {
+        endX: "0.859",
+        endY: "0.368",
+        startX: "0.841",
+        startY: "0.348",
+        centerX: "0.85",
+        centerY: "0.36",
+        itemName: "Black Single Eye Band",
+        itemImageUrl: "https://www.pinterest.com/cathygene99/hidden-pictures/",
+      },
+      {
+        endX: "0.338",
+        endY: "0.641",
+        startX: "0.307",
+        startY: "0.608",
+        centerX: "0.322",
+        centerY: "0.625",
+        itemName: "Yellow Hard Hat",
+        itemImageUrl: "https://fi.pinterest.com/lenatvist/search-and-find/",
+      },
+      {
+        endX: "0.832",
+        endY: "0.812",
+        startX: "0.812",
+        startY: "0.784",
+        centerX: "0.822",
+        centerY: "0.798",
+        itemName: "Black Shirt",
+        itemImageUrl: "https://fi.pinterest.com/pin/1055599905969229/",
+      },
+    ],
+    published: true,
+    sample: true,
+  };
+  request(app)
+    .put(`/images/${imageId}`)
+    .send(updatedImage)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      if (res.body.imageName !== "Behind the Farmer Back")
+        throw new Error("mismatch imageName value");
+    })
+    .end(function (err, res) {
+      if (err) return done(err);
+      return done();
+    });
+});
+
+test("DELETE /images/:id delete specified image", (done) => {
+  request(app)
+    .delete(`/images/${imageId}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      if (res.body.sample !== true) throw new Error("mismatch sample value");
+    })
+    .end(function (err, res) {
+      if (err) return done(err);
+      return done();
+    });
 });

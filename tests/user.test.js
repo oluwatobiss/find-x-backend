@@ -3,13 +3,12 @@ const express = require("express");
 const userRouter = require("../routes/user");
 const request = require("supertest");
 const app = express();
+let userId = 0;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/users", userRouter);
-
-let userId = 0;
 
 // Bypass the middleware authentication by replacing the middleware's actual implementation with an explicit module factory function like so: jest.mock(actualMiddleware, moduleFactoryToReplaceTheActualMiddleware)
 // Doc: https://jestjs.io/docs/jest-object#jestmockmodulename-factory-options
