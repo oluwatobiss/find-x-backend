@@ -89,7 +89,7 @@ test("POST /images create new image", (done) => {
 
 test("PUT /images/:id update specified image", (done) => {
   const updatedImage = {
-    imageName: "Behind the Farmer Back",
+    imageName: "Behind the Farmer's Back",
     imageUrl:
       "https://www.pinterest.com/pin/hidden-pictures-worksheet--514747432422979388/",
     itemsData: [
@@ -133,7 +133,7 @@ test("PUT /images/:id update specified image", (done) => {
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
-      if (res.body.imageName !== "Behind the Farmer Back")
+      if (res.body.imageName !== "Behind the Farmer&#x27;s Back")
         throw new Error("mismatch imageName value");
     })
     .end(function (err, res) {

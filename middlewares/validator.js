@@ -58,7 +58,7 @@ const imageForm = [
     .notEmpty()
     .withMessage(`Name ${emptyErr}.`)
     .escape()
-    .isAlpha("en-US", { ignore: [" "] })
+    .isAlpha("en-US", { ignore: [" ", "&#x27;"] })
     .withMessage(`Name ${alphaErr}.`)
     .isLength({ min: 2, max: 64 })
     .withMessage(`Name ${lengthErr(2, 64)}.`),
