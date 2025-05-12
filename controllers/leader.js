@@ -17,6 +17,8 @@ async function getLeaders(req, res) {
 
 async function createLeader(req, res) {
   try {
+    console.log(req.body);
+
     const { playerId, hours, minutes, seconds } = req.body;
     const twoDigitHours = hours < 10 ? `0${hours}` : hours;
     const twoDigitMinutes = minutes < 10 ? `0${minutes}` : minutes;

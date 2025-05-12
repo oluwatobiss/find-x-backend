@@ -5,10 +5,6 @@ const prisma = new PrismaClient();
 
 async function getImages(req, res) {
   try {
-    console.log("=== getImages ===");
-    console.log(req.query);
-    console.log(req.query.auth === "true");
-
     const images =
       req.query.auth === "true"
         ? await prisma.image.findMany()
@@ -38,8 +34,6 @@ async function getImageItems(req, res) {
 const createImage = [
   validate.imageForm,
   async (req, res) => {
-    console.log("=== createImage controller ===");
-    console.log(req.body);
     const result = validationResult(req);
     if (!result.isEmpty()) {
       return res.status(400).json({ errors: result.array() });

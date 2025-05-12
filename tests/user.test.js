@@ -1,14 +1,17 @@
 const cors = require("cors");
 const express = require("express");
 const userRouter = require("../routes/user");
+const leaderRouter = require("../routes/leader");
 const request = require("supertest");
 const app = express();
 let userId = 0;
+let leaderId = 0;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/users", userRouter);
+app.use("/leaders", leaderRouter);
 
 // Bypass the middleware authentication by replacing the middleware's actual implementation with an explicit module factory function like so: jest.mock(actualMiddleware, moduleFactoryToReplaceTheActualMiddleware)
 // Doc: https://jestjs.io/docs/jest-object#jestmockmodulename-factory-options
@@ -76,6 +79,48 @@ test("PUT /users/:id update specified user account", (done) => {
       if (err) return done(err);
       return done();
     });
+});
+
+test("GET /leaders get all leaders' data", (done) => {
+  request(app)
+    .get("/leaders/")
+    .expect("Content-Type", /json/)
+    .expect(function (res) {
+      console.log("=== Custom Assertion Function ===");
+      console.log(res.body[0]);
+      if (!("time" in res.body[0])) throw new Error("missing time key");
+    })
+    .end(function (err, res) {
+      if (err) return done(err);
+      console.log("=== GET /leaders Test Passed! ===");
+      console.log(res.text);
+      return done();
+    });
+});
+
+test("POST /leaders create new leader", (done) => {
+  const newLeader = { playerId: "test", hours: 0, minutes: 1, seconds: 23 };
+  request(app)
+    .post("/leaders")
+    .send(newLeader)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      if (!("timeSort" in res.body)) throw new Error("missing timeSort key");
+    })
+    .then((res) => {
+      const expectedBody = {
+        id: res.body.id,
+        date: res.body.date,
+        playerId: "test",
+        time: "00:01:23",
+        timeSort: 123,
+      };
+      expect(res.body).toEqual(expectedBody);
+      leaderId = res.body.id;
+      done();
+    })
+    .catch((err) => done(err));
 });
 
 test("DELETE /users/:id delete specified user account", (done) => {
