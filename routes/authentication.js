@@ -35,9 +35,8 @@ passport.use(
 
 router.post("/", validate.loginForm, async (req, res, next) => {
   const result = validationResult(req);
-  if (!result.isEmpty()) {
+  if (!result.isEmpty())
     return res.status(400).json({ errors: result.array() });
-  }
   passport.authenticate("local", async (err, userData, info) => {
     try {
       if (err || !userData) {

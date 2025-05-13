@@ -4,9 +4,15 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "build": "npm run postinstall && npm run db:deploy && npm run seed",
+    "db:deploy": "prisma migrate deploy",
+    "db:dev": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:reset": "prisma migrate reset -f",
     "dev": "node app.js",
+    "postinstall": "prisma generate",
+    "seed": "prisma db seed",
     "start": "node app.js",
-    "seed": "npx prisma db seed",
     "test": "jest"
   },
   "prisma": {

@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const controller = require("../controllers/user");
 const middleware = require("../middlewares/authentication");
-
 const router = Router();
 
 router.get("/", middleware.authenticateUser, controller.getUsers);

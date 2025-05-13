@@ -35,9 +35,8 @@ const createImage = [
   validate.imageForm,
   async (req, res) => {
     const result = validationResult(req);
-    if (!result.isEmpty()) {
+    if (!result.isEmpty())
       return res.status(400).json({ errors: result.array() });
-    }
     try {
       const { imageName, imageUrl, sample, itemsData, published } = req.body;
       const response = await prisma.image.create({
@@ -57,9 +56,8 @@ const updateImage = [
   validate.imageForm,
   async (req, res) => {
     const result = validationResult(req);
-    if (!result.isEmpty()) {
+    if (!result.isEmpty())
       return res.status(400).json({ errors: result.array() });
-    }
     try {
       const id = +req.params.id;
       const { imageName, imageUrl, sample, itemsData, published } = req.body;

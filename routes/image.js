@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const controller = require("../controllers/image");
 const middleware = require("../middlewares/authentication");
-
 const router = Router();
 
 router.get("/", controller.getImages);

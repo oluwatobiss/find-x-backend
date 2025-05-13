@@ -86,14 +86,10 @@ test("GET /leaders get all leaders' data", (done) => {
     .get("/leaders/")
     .expect("Content-Type", /json/)
     .expect(function (res) {
-      console.log("=== Custom Assertion Function ===");
-      console.log(res.body[0]);
       if (!("time" in res.body[0])) throw new Error("missing time key");
     })
     .end(function (err, res) {
       if (err) return done(err);
-      console.log("=== GET /leaders Test Passed! ===");
-      console.log(res.text);
       return done();
     });
 });

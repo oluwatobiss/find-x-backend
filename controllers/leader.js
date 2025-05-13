@@ -17,8 +17,6 @@ async function getLeaders(req, res) {
 
 async function createLeader(req, res) {
   try {
-    console.log(req.body);
-
     const { playerId, hours, minutes, seconds } = req.body;
     const twoDigitHours = hours < 10 ? `0${hours}` : hours;
     const twoDigitMinutes = minutes < 10 ? `0${minutes}` : minutes;
@@ -31,35 +29,20 @@ async function createLeader(req, res) {
       orderBy: { timeSort: "asc" },
     });
     let leader = null;
-
-    console.log("=== createLeader ===");
-    console.log({ playerId, hours, minutes, seconds });
-    console.log({ playerId, twoDigitHours, twoDigitMinutes, twoDigitSeconds });
-    console.log("=== Current Leaders ===");
-    console.log(leaders);
-
     if (leaders.length < 10) {
-      console.log("=== Leaderboard less than 10 ===");
       leader = await prisma.leader.create({
         data: { playerId, time, timeSort },
       });
-      console.log(leader);
     }
-
     if (leaders.length === 10) {
-      console.log("=== Leaderboard Filled ===");
       const tenthLeader = leaders[leaders.length - 1];
-      console.log(tenthLeader);
       if (timeSort < tenthLeader.timeSort) {
-        console.log("=== Replace 10th Leader with New ===");
         await prisma.leader.delete({ where: { id: tenthLeader.id } });
         leader = await prisma.leader.create({
           data: { playerId, time, timeSort },
         });
       }
-      console.log(leader);
     }
-
     await prisma.$disconnect();
     return res.json(leader);
   } catch (e) {

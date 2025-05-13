@@ -6,9 +6,8 @@ const prisma = new PrismaClient();
 
 async function getUsers(req, res) {
   try {
-    if (req.query.status !== "ADMIN") {
+    if (req.query.status !== "ADMIN")
       return res.status(400).json({ message: "Invalid access credentials" });
-    }
     const users = await prisma.user.findMany();
     await prisma.$disconnect();
     return res.json(users);
@@ -23,9 +22,8 @@ const createUser = [
   validate.signUpForm,
   async (req, res, next) => {
     const result = validationResult(req);
-    if (!result.isEmpty()) {
+    if (!result.isEmpty())
       return res.status(400).json({ errors: result.array() });
-    }
     const { firstName, lastName, username, email, password, admin, adminCode } =
       req.body;
     let status = "GAMER";
@@ -68,9 +66,8 @@ const updateUser = [
   validate.updateUserForm,
   async (req, res, next) => {
     const result = validationResult(req);
-    if (!result.isEmpty()) {
+    if (!result.isEmpty())
       return res.status(400).json({ errors: result.array() });
-    }
     try {
       const id = +req.params.id;
       const { firstName, lastName, username, email, admin, adminCode } =
