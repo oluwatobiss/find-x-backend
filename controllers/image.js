@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require("../prisma/generated/prisma-client-js/client");
 const { validationResult } = require("express-validator");
 const validate = require("../middlewares/validator");
 const prisma = new PrismaClient();

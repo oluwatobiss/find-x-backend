@@ -26,3 +26,6 @@ pnpm-debug.log*
 # Word backup files
 ~$*.docx
 *.tmp
+
+# Prisma
+prisma/generated/prisma-client-js
