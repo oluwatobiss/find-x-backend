@@ -6,9 +6,13 @@ const prisma = new PrismaClient();
 async function getImages(req, res) {
   try {
     const images =
-      req.query.auth === "true"
+      req.query.auth === "ADMIN"
         ? await prisma.image.findMany()
-        : await prisma.image.findMany({ where: { sample: true } });
+        : req.query.auth === "GAMER"
+        ? await prisma.image.findMany({ where: { published: true } })
+        : await prisma.image.findMany({
+            where: { published: true, sample: true },
+          });
     await prisma.$disconnect();
     return res.json(images);
   } catch (e) {
